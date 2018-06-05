@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.kafka
+package com.wd.jobsaccount.flink.kafka
 
 import java.util.Properties
 import org.apache.flink.streaming.api.scala._
@@ -9,7 +9,6 @@ import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.api.common.functions.FilterFunction
 import org.apache.flink.api.common.functions.MapFunction
-import scala.collection.Map
 
 
 /**

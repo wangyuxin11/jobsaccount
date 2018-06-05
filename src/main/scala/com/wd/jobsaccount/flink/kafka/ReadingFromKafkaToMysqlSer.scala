@@ -1,15 +1,11 @@
-package com.wanda.jobsaccount.kafka
+package com.wd.jobsaccount.flink.kafka
 
 import java.util.Properties
-
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer09
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema
-import org.apache.flink.streaming.util.serialization.DeserializationSchema
-import org.apache.flink.streaming.util.serialization.KeyedDeserializationSchemaWrapper
 
 /*
  * 

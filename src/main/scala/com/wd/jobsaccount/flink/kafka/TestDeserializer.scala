@@ -1,10 +1,8 @@
-package com.wanda.jobsaccount.kafka
+package com.wd.jobsaccount.flink.kafka
 
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
-
 import scala.util.parsing.json._
-
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.java.typeutils.TypeExtractor
 import org.apache.flink.streaming.util.serialization.DeserializationSchema

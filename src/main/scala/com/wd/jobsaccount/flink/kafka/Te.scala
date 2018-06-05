@@ -1,12 +1,4 @@
-package com.wanda.jobsaccount.kafka
-
-//import com.alibaba.fastjson.JSONObject;
-//import com.alibaba.fastjson.JSON
-
-import java.io.ObjectInputStream
-import java.io.ByteArrayInputStream
-
-// scala json 序列化与反序列化  http://lvjun106.iteye.com/blog/2334109
+package com.wd.jobsaccount.flink.kafka
 
 import scala.util.parsing.json._
 

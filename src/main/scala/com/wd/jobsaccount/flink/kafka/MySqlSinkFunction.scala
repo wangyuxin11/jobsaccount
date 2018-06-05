@@ -1,9 +1,7 @@
-package com.wanda.jobsaccount.kafka
+package com.wd.jobsaccount.flink.kafka
 
 import java.sql.DriverManager
 import java.sql.ResultSet
-import java.sql.Date
-
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction
 
 class MySqlSinkFunction extends RichSinkFunction[Test] {

@@ -1,13 +1,4 @@
-package com.wanda.jobsaccount.kafka
-
-//import scala.util.parsing.json._
-
-import java.io.ObjectInputStream
-import java.io.ByteArrayInputStream
-import java.io.ObjectOutputStream
-import java.io.ByteArrayOutputStream
-
-import com.alibaba.fastjson.JSONObject
+package com.wd.jobsaccount.flink.kafka
 
 class Test {
 

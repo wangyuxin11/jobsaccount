@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.kafka
+package com.wd.jobsaccount.flink.kafka
 
 import java.io.ObjectInputStream
 import java.io.ByteArrayInputStream
