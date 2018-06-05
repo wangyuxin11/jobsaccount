@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.scala.coll
+package com.wd.jobsaccount.scala
 
 /**
  * 

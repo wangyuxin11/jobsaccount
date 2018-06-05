@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.scala.json
+package com.wd.jobsaccount.scala.json
 
 import com.alibaba.fastjson.JSON
 

@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.scala.parse
+package com.wd.jobsaccount.scala.parse
 
 
 import scala.util.parsing.combinator._

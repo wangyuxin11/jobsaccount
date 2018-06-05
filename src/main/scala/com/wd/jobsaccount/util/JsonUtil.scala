@@ -1,12 +1,7 @@
-package com.wanda.jobsaccount.util
+package com.wd.jobsaccount.util
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.fastjson.serializer.JSONSerializer
-import com.alibaba.fastjson.serializer.SerializerFeature
-import com.alibaba.fastjson.JSON
-
 import java.util.HashMap
-import com.wd.jobsaccount.flink.kafka.Test
 
 object JsonUtil {
   def main(args: Array[String]) {

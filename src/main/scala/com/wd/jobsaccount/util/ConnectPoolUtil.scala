@@ -1,7 +1,6 @@
-package com.wanda.jobsaccount.util
+package com.wd.jobsaccount.util
 
 import java.sql.{ Connection, PreparedStatement, ResultSet }
-//import org.apache.commons.dbcp.BasicDataSource
 import com.alibaba.druid.pool.DruidDataSource
 
 object ConnectPoolUtil {

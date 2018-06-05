@@ -1,4 +1,4 @@
-package com.wanda.jobsaccount.scala
+package com.wd.jobsaccount.scala
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

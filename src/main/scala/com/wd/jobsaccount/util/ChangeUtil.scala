@@ -1,6 +1,4 @@
-package com.wanda.jobsaccount.util
-
-import java.util.Arrays
+package com.wd.jobsaccount.util
 
 class ChangeUtil {
   
