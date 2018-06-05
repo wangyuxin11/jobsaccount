@@ -1,0 +1,48 @@
+五、迭代（Iterations）
+迭代流程序实现了一个阶段方法并将之嵌入到一个IterativeStream中。作为一个可能永远不会结束的程序，它没有最大迭代数，反之，你需要使用split或filter的transformation来明确流的哪一部分会被反馈到迭代中，哪一部分则继续转发到下游。这里，我们使用filter作为例子，我们定义IterativeStream：
+
+IterativeStream<Integer> iteration = input.iterate();
+
+然后，我们定义在循环中将要进行的逻辑处理，我们通过一系列transformation来实现（这里用了一个简单的map transformation）：
+
+DataStream<Integer> iterationBody = iteration.map(/* this is executed many times */);
+
+ 
+
+我们可以调用IterativeStream的closeWith(feedbackStream)函数来关闭一个迭代并定义迭代尾。传递给closeWith方法的DataStream将会反馈回迭代头。分割出用来反馈的stream的部分和向前传播的stream部分通常的方法便是使用filter来进行分割。这些filter可以定义诸如"termination"逻辑，即element将会传播到下游，而不是被反馈回去。
+
+iteration.closeWith(iterationBody.filter(/* one part of the stream */));
+DataStream<Integer> output = iterationBody.filter(/* some other part of the stream */);
+
+ 
+
+默认地，反馈的那部分流将会自动设置为迭代头的输入，要想重载该行为，用户需要设置closeWith函数中的一个boolean参数。例如，下面是一个持续将整数序列中的数字减1知道它们变为0的程序：
+
+DataStream<Long> someIntegers = env.generateSequence(0, 1000);
+
+IterativeStream<Long> iteration = someIntegers.iterate();
+
+DataStream<Long> minusOne = iteration.map(new MapFunction<Long, Long>() {
+　　@Override
+　　public Long map(Long value) throws Exception {
+　　　　return value - 1 ;
+　　}
+});
+
+DataStream<Long> stillGreaterThanZero = minusOne.filter(new FilterFunction<Long>() {
+　　@Override
+　　public boolean filter(Long value) throws Exception {
+　　　　return (value > 0);
+　　}
+});
+
+iteration.closeWith(stillGreaterThanZero);
+
+DataStream<Long> lessThanZero = minusOne.filter(new FilterFunction<Long>() {
+　　@Override
+　　public boolean filter(Long value) throws Exception {
+　　　　return (value <= 0);
+　　}
+});
+
+ 

@@ -1,0 +1,53 @@
+
+
+# 利用Flink stream从kafka中写数据到mysql
+https://blog.csdn.net/luoyexuge/article/details/53014703
+
+
+
+# 开发者干货 | 当Flink遇到Kafka - FlinkKafkaConsumer使用详解 
+http://www.sohu.com/a/168546400_617676
+
+
+
+
+# 03 打包构建Flink的部署包
+https://blog.csdn.net/codemosi/article/details/49760431
+
+
+https://blog.csdn.net/god_zhi_big/article/details/78231134
+
+
+
+
+
+# flink项目开发-配置jar依赖，连接器，类库v1.4
+https://blog.csdn.net/xu470438000/article/details/79512784
+
+
+
+
+#kafka connect简介以及部署
+https://blog.csdn.net/u011687037/article/details/57411790
+
+
+
+#【译】Apache Flink Kafka consumer
+https://www.cnblogs.com/huxi2b/p/7456936.html
+
+
+# 利用Flink stream从kafka中写数据到mysql
+https://blog.csdn.net/luoyexuge/article/details/53014703
+
+
+
+
+
+# Kafka+Flink整合demo
+https://blog.csdn.net/lmalds/article/details/51780950
+
+
+
+# 关于Spark Streaming微批次，Flink真正流处理 消费Kafka数据，处理数据的差距对比
+https://blog.csdn.net/Dax1n/article/details/78185957
+

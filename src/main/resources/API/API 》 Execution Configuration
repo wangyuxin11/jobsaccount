@@ -1,0 +1,29 @@
+六、执行参数
+StreamExecutionEnvironment包含ExecutionConfig，它可以使用户设置job的确切运行时配置值。
+
+请参考execution configuration来查看参数的解释。特别的，以下这些参数仅适用于DataStream API：
+
+enableTimestamps() / disableTimestamps()：在每一个source发出的事件上附加上一个时间戳。函数areTimestampsEnabled()可以返回该状态的当前值。
+
+setAutoWatermarkInterval(long milliseconds)：设置自动水印发布（watermark emission）区间。你可以通过调用函数getAutoWatermarkInterval()来获取当前值。
+
+ 
+
+6.1 容错
+文档Fault Tolerance Documentation描述了打开并配置Flink的检查点机制的选项和参数
+
+ 
+
+6.2 控制执行时间
+默认的，element在网络传输时不是一个个单独传输的（这会导致不必要的网络流量），而是缓存后传输。缓存（是在设备间传输的实际单位）的大小可以在Flink的配置文件中设置。尽管该方法有益于优化吞吐量，他会在stream到达不够快时导致执行时间方面的问题。为了控制吞吐量和执行时间，你可以在执行环境（或独立的Operator）中调用env.setBufferTimeout(timeoutMillis)来设置等待装满buffer的最大等待时间，在这个时间过后，不管buffer是否已满，它都会自动发出。该默认超时时间是100ms。下例是设置API的用法：
+
+LocalStreamEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+env.setBufferTimeout(timeoutMillis);
+
+env.genereateSequence(1,10).map(new MyMapper()).setBufferTimeout(timeoutMillis);
+
+ 
+
+要最大化吞吐量，设置setBufferTimeout(-1)来去除超时时间，则buffer仅在它满后才会被flush。要最小化执行时间，设置timeout为一个接近0的数字（如5ms或10ms）。应当避免设置Timeout为0，因为它会造成严重的性能下降。
+
+ 

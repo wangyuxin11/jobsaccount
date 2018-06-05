@@ -1,0 +1,43 @@
+-rw-rw-r-- 1 exchange exchange 32843 May 24 09:59 jobsaccount-1.0.jar
+[exchange@cdvl-exch-a01 jobjaccount]$ /app/data/flink/flink-1.3.1/bin/flink run -c com.wanda.jobsaccount.kafka.ReadingFromKafka /app/data/jar/jobjaccount/jobsaccount-1.0.jar
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/app/data/flink/flink-1.3.1/lib/slf4j-log4j12-1.7.7.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/app/data/flink/flink-1.3.1/lib/slf4j-log4j12.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+Cluster configuration: Standalone cluster with JobManager at /10.213.128.97:6123
+Using address 10.213.128.97:6123 to connect to JobManager.
+JobManager web interface address http://10.213.128.97:8081
+Starting execution of program
+Submitting job with JobID: f8948847aa8dc4b0f9172191c5cd4fe1. Waiting for job completion.
+Connected to JobManager at Actor[akka.tcp://flink@10.213.128.97:6123/user/jobmanager#1677507799] with leader session id 00000000-0000-0000-0000-000000000000.
+05/24/2018 10:00:06     Job execution switched to status RUNNING.
+05/24/2018 10:00:06     Source: Custom Source -> Sink: Unnamed(1/1) switched to SCHEDULED
+05/24/2018 10:00:06     Job execution switched to status FAILING.
+org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException: Not enough free slots available to run the job. You can decrease the operator parallelism or increase the number of slots per TaskManager in the configuration. Task to schedule: < Attempt #0 (Source: Custom Source -> Sink: Unnamed (1/1)) @ (unassigned) - [SCHEDULED] > with groupID < cbc357ccb763df2852fee8c4fc7d55f2 > in sharing group < SlotSharingGroup [cbc357ccb763df2852fee8c4fc7d55f2] >. Resources available to scheduler: Number of instances=0, total number of slots=0, available slots=0
+        at org.apache.flink.runtime.jobmanager.scheduler.Scheduler.scheduleTask(Scheduler.java:262)
+        at org.apache.flink.runtime.jobmanager.scheduler.Scheduler.allocateSlot(Scheduler.java:139)
+        at org.apache.flink.runtime.executiongraph.Execution.allocateSlotForExecution(Execution.java:368)
+        at org.apache.flink.runtime.executiongraph.ExecutionJobVertex.allocateResourcesForAll(ExecutionJobVertex.java:478)
+        at org.apache.flink.runtime.executiongraph.ExecutionGraph.scheduleEager(ExecutionGraph.java:862)
+        at org.apache.flink.runtime.executiongraph.ExecutionGraph.scheduleForExecution(ExecutionGraph.java:813)
+        at org.apache.flink.runtime.jobmanager.JobManager$$anonfun$org$apache$flink$runtime$jobmanager$JobManager$$submitJob$1.apply$mcV$sp(JobManager.scala:1425)
+        at org.apache.flink.runtime.jobmanager.JobManager$$anonfun$org$apache$flink$runtime$jobmanager$JobManager$$submitJob$1.apply(JobManager.scala:1372)
+        at org.apache.flink.runtime.jobmanager.JobManager$$anonfun$org$apache$flink$runtime$jobmanager$JobManager$$submitJob$1.apply(JobManager.scala:1372)
+        at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
+        at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
+        at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:40)
+        at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:397)
+        at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
+        at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
+        at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
+        at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
+05/24/2018 10:00:06     Source: Custom Source -> Sink: Unnamed(1/1) switched to CANCELED
+05/24/2018 10:00:06     Job execution switched to status RESTARTING.
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+

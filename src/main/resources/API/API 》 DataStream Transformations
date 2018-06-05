@@ -1,0 +1,207 @@
+
+二、DataStream Transformations
+
+Data transformation会将一或多个DataStream转换成一个新的DataStream。
+程序可以将多个transformation结合形成复杂的拓扑结构（topology）。
+本小节给出了所有可用的transformation的描述。
+
+1、Map : DataStream -> DataStream
+获取一个element并产出一个element。下例是一个将输入*2的map方法：
+——————————————————————————————————————————————————————————
+DataStream<Integer> dataStream = //...
+dataStream.map(new MapFunction<Integer, Integer>() {
+　　@Override
+　　public Integer map(Integer value) throws Exception {
+　　　　return 2 * value;
+　　}
+});
+
+
+2、FlapMap : DataStream -> DataStream
+获取一个element，并产生出0、1或多个element。下例是一个为句子分词的flatmap方法
+——————————————————————————————————————————————————————————
+dataStream.flatMap(new FlatMapFunction<String, String>() {
+　　@Override
+　　public void flatMap(String value, Collector<String> out) throws Exception {
+　　　　for(String word: value.split(" ")){
+　　　　out.collect(word);
+　　　　}
+　　}
+});
+
+
+3、Filter : DataStream -> DataStream
+在每个获取的element上运行一个boolean方法，留下那些方法返回true的element。下例是一个过滤掉0值的filter
+——————————————————————————————————————————————————————————
+dataStream.filter(new FilterFunction<Integer>() {
+　　@Override
+　　public boolean filter(Integer value) throws Exception {
+　　　　return value != 0;
+　　}
+});
+
+
+4、KeyBy : DataStream -> KeyedStream
+将流逻辑分为不相交的分区，每个分区包含的都是具有相同key的element，该分区方法使用hash分区实现。定义key的方法见于Keys。
+下例是一个返回KeyedDataStream的transformation。
+——————————————————————————————————————————————————————————
+dataStream.keyBy("someKey") // Key by field "someKey"
+dataStream.keyBy(0) // Key by the first element of a Tuple
+
+
+5、Reduce : KeyedStream -> DataStream
+一个在keyed data stream上“滚动”进行的reduce方法。
+将上一个reduce过的值和当前element结合，产生新的值并发送出。下例是一个创建部分和的reduce方法。
+——————————————————————————————————————————————————————————
+keyedStream.reduce(new ReduceFunction<Integer>() {
+　　@Override
+　　public Integer reduce(Integer value1, Integer value2) throws Exception {
+　　　　return value1 + value2;
+　　}
+});
+
+
+6、Fold : KeyedStream -> DataStream
+一个在带有初始值的数据流上“滚动”进行的fold方法。将上一个fold的值和当前element结合，产生新的值并发送出。
+下例是一个fold方法，当应用于序列{1, 2, 3, 4, 5}时，它发出序列{"start-1", "start-1-2", "start-1-2-3" …}。
+——————————————————————————————————————————————————————————
+DataStream<String> result = keyedStream.fold("start", new FoldFunction<Integer, String>() {
+　　@Override
+　　public String fold(String current, Integer value) {
+　　　　return current + "-" + value;
+　　}
+});
+
+
+7、Aggregations : KeyedStream -> DataStream
+在一个keyed DataStream上“滚动”进行聚合的方法。
+其中，min和minBy的区别在于min返回最小值，而minBy返回的是带有在此域中最小值的element（max和maxBy一样如此）。
+——————————————————————————————————————————————————————————
+keyedStream.sum(0);
+keyedStream.sum("key");
+keyedStream.min(0);
+keyedStream.min("key");
+keyedStream.max(0);
+keyedStream.max("key");
+keyedStream.minBy(0);
+keyedStream.minBy("key");
+keyedStream.maxBy(0);
+keyedStream.maxBy("key");
+
+
+8、Window : KeyedStream - > WindowedStream
+Window可以定义在已经分区的KeyedStream上。窗口将根据一些特征（如最近5秒到达的数据）将数据按其各自的key集合在一起。
+有关窗口的完整描述见于windows
+——————————————————————————————————————————————————————————
+// Last 5 seconds of data
+dataStream.keyBy(0).window(TumblingEventTimeWindows.of(Time.seconds(5)));
+
+
+9、WindowAll : DataStream -> AllWindowedStream 
+Window可以定义在普通的DataStream上。窗口将根据一些特征（如最近5秒到达的数据）将所有Stream事件集合在一起。有关窗口的完整描述见于windows
+警告：该transformation在很多情况下都不是并行化的，所有数据将被收集到一个运行windowAll Operator的任务上。 
+——————————————————————————————————————————————————————————
+dataStream.windowAll(TumblingEventTimeWindows.of(Time.seconds(5))); // Last 5 seconds of data
+
+
+10、Window Apply : WindowedStream -> DataStream   AllWindowedStream -> DataStream
+将一个一般函数应用到window整体上去，下面是一个人工计算window中所有element的总和的应用。
+注意：如果你正在使用一个windowAll的transformation，你需要使用AllWindowFunction来代替下例中的参数。
+——————————————————————————————————————————————————————————
+windowedStream.apply (new WindowFunction<Tuple2<String,Integer>, Integer, Tuple, Window>() {
+public void apply (Tuple tuple,
+　　Window window,
+　　Iterable<Tuple2<String, Integer>> values,
+　　Collector<Integer> out) throws Exception {
+　　　　int sum = 0;
+　　　　for (value t: values) {
+　　　　　　sum += t.f1;
+　　　　}
+　　　　out.collect (new Integer(sum));
+　　}
+});
+
+// applying an AllWindowFunction on non-keyed window stream
+allWindowedStream.apply (new AllWindowFunction<Tuple2<String,Integer>, Integer, Window>() {
+public void apply (Window window,
+　　Iterable<Tuple2<String, Integer>> values,
+　　Collector<Integer> out) throws Exception {
+　　　　int sum = 0;
+　　　　for (value t: values) {
+　　　　　　sum += t.f1;
+　　　　}
+　　　　out.collect (new Integer(sum));
+　　}
+});
+
+
+11、Window Reduce : WindowedStream -> DataStream
+12、Window Fold
+13、Aggregations on windows
+14、Union
+15、Window Join
+16、Window CoGroup
+17、Connect
+18、CoMap, CoFlatMap
+19、Split : DataStream -> SplitStream
+20、Select : SplitStream -> DataStream
+21、Iterate : DataStream -> IterativeStream -> DataStream
+
+22、Extract Timestamps : DataStream -> DataStream
+通过从数据中抽取时间戳来使得通过使用事件时间语义的窗口可以工作。详情见于Event Time。
+——————————————————————————————————————————————————————————
+stream.assignTimestamps (new TimeStampExtractor() {...});
+
+接下来的Transformation是对Tuple类型的data stream可用的Transformation：
+23、Project : DataStream -> DataStream
+从tuple中选择出域的子集而产生新的DataStream
+——————————————————————————————————————————————————————————
+DataStream<Tuple3<Integer, Double, String>> in = // [...]
+DataStream<Tuple2<String, Integer>> out = in.project(2,0);
+
+———————————————物理级分割 Physical Partitioning———————————————
+如果需要，Flink同样提供了在进行一次transformation后针对精确stream分割的低层次的控制(low-level control)，它们通过以下几个方法实现。
+
+24、Custom partitioning : DataStream -> DataStream
+使用一个用户自定义的Partitioner来对每个element选择目标任务sd
+——————————————————————————————————————————————————————————
+dataStream.partitionCustom(partitioner, "someKey");
+dataStream.partitionCustom(partitioner, 0);
+
+25、Random partitioning : DataStream -> DataStream
+根据均匀分布来随机分割element
+——————————————————————————————————————————————————————————
+dataStream.shuffle();
+
+26、Rebalancing(轮询分割) : DataStream -> DataStream
+27、Rescaling : DataStream -> DataStream
+28、Broadcasting : DataStream -> DataStream
+
+
+————————链接任务以及资源组（Task chaining & resource groups）————————
+29、startNewChain() : 
+30、disableChaining()
+31、slotSharingGroup()
+32、
+33、
+34、
+35、
+36、
+37、
+38、
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://www.cnblogs.com/lanyun0520/p/5730403.html

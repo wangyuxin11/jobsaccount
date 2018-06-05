@@ -1,0 +1,46 @@
+
+
+这种很明显的是因为slot不够用，那么你首先你去查看自己的从节点是不是有任务占用了，结束任务就好。
+____________________
+
+集群模式
+org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException: Not enough free slots available to run the job. You can decrease the operator parallelism or increase the number of slots per TaskManager in the configuration. Task to schedule: < Attempt #1 (Source: Custom Source -> Sink: Unnamed (1/1)) @ (unassigned) - [SCHEDULED] > with groupID < cbc357ccb763df2852fee8c4fc7d55f2 > in sharing group < SlotSharingGroup [cbc357ccb763df2852fee8c4fc7d55f2] >. Resources available to scheduler: Number of instances=0, total number of slots=0, available slots=0
+        at org.apache.flink.runtime.jobmanager.scheduler.Scheduler.scheduleTask(Scheduler.java:262)
+        at org.apache.flink.runtime.jobmanager.scheduler.Scheduler.allocateSlot(Scheduler.java:139)
+        at org.apache.flink.runtime.executiongraph.Execution.allocateSlotForExecution(Execution.java:368)
+        at org.apache.flink.runtime.executiongraph.ExecutionJobVertex.allocateResourcesForAll(ExecutionJobVertex.java:478)
+        at org.apache.flink.runtime.executiongraph.ExecutionGraph.scheduleEager(ExecutionGraph.java:862)
+        at org.apache.flink.runtime.executiongraph.ExecutionGraph.scheduleForExecution(ExecutionGraph.java:813)
+        at org.apache.flink.runtime.executiongraph.ExecutionGraph.restart(ExecutionGraph.java:1170)
+        at org.apache.flink.runtime.executiongraph.restart.ExecutionGraphRestarter$1.call(ExecutionGraphRestarter.java:40)
+        at akka.dispatch.Futures$$anonfun$future$1.apply(Future.scala:95)
+        at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
+        at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
+        at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+        at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+        at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+        at java.lang.Thread.run(Thread.java:745)
+
+
+本地模式
+java.lang.NoSuchMethodError: scala.Predef$.ArrowAssoc(Ljava/lang/Object;)Ljava/lang/Object;
+        at kafka.consumer.FetchRequestAndResponseMetrics.<init>(FetchRequestAndResponseStats.scala:32)
+        at kafka.consumer.FetchRequestAndResponseStats.<init>(FetchRequestAndResponseStats.scala:46)
+        at kafka.consumer.FetchRequestAndResponseStatsRegistry$$anonfun$2.apply(FetchRequestAndResponseStats.scala:59)
+        at kafka.consumer.FetchRequestAndResponseStatsRegistry$$anonfun$2.apply(FetchRequestAndResponseStats.scala:59)
+        at kafka.utils.Pool.getAndMaybePut(Pool.scala:61)
+        at kafka.consumer.FetchRequestAndResponseStatsRegistry$.getFetchRequestAndResponseStats(FetchRequestAndResponseStats.scala:63)
+        at kafka.consumer.SimpleConsumer.<init>(SimpleConsumer.scala:39)
+        at kafka.javaapi.consumer.SimpleConsumer.<init>(SimpleConsumer.scala:34)
+        at org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer08.getPartitionsForTopic(FlinkKafkaConsumer08.java:279)
+        at org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer08.getKafkaPartitions(FlinkKafkaConsumer08.java:221)
+        at org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumerBase.open(FlinkKafkaConsumerBase.java:351)
+        at org.apache.flink.api.common.functions.util.FunctionUtils.openFunction(FunctionUtils.java:36)
+        at org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator.open(AbstractUdfStreamOperator.java:111)
+        at org.apache.flink.streaming.runtime.tasks.StreamTask.openAllOperators(StreamTask.java:376)
+        at org.apache.flink.streaming.runtime.tasks.StreamTask.invoke(StreamTask.java:253)
+        at org.apache.flink.runtime.taskmanager.Task.run(Task.java:702)
+        at java.lang.Thread.run(Thread.java:745)

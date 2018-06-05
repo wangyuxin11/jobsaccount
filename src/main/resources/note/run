@@ -1,0 +1,12 @@
+
+# -d 以独立(detached)模式运行示例程序(只能执行war ， -c可以执行jar)
+
+/app/data/flink/flink-1.3.1/bin/flink run -c com.wanda.jobsaccount.kafka.ReadingFromKafka /app/data/jar/jobjaccount/jobsaccount-1.0.jar prod.properties
+
+
+# 列出正在运行的Job(包含Job ID信息)            $ ./bin/flink list -r
+# 列出已经调度的和正在运行的Job(包含Job ID信息)    $ ./bin/flink list
+# 运行示例程序，并禁止Flink输出日志                                       $ ./bin/flink run -q ./examples/batch/WordCount.jar
+# demo                                  $ flink run -c com.toptrade.Job toptrade-flink-1.0.jar prod.properties
+
+

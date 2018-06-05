@@ -1,0 +1,48 @@
+
+七、Debugging
+
+在分布式集群上运行流程序之前，确保算法正确执行很重要。因此，实现数据分析程序通常需要递增的检查结果、debug、优化的过程。
+
+Flink提供了可以显著简化数据分析程序的开发过程的特性，即可以在IDE中本地进行debug、注入测试数据、以及结果数据的收集等。本节对如何简化Flink程序开发提出几点建议。
+
+ 
+
+7.1 本地执行环境
+LocalStreamEnvironment在创建它的同一个JVM进程下创建Flink系统。如果你从IDE中启动一个LocalEnvironment，你可以在代码中设置断点来简单地debug你的程序。下例为LocalEnvironment是如何创建并使用的：
+
+final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+
+DataStream<String> lines = env.addSource(/* some source */);
+// build your program
+
+env.execute();
+
+ 
+
+7.2 Collection数据源
+Flink提供基于Java collection的特殊数据源来方便测试。一旦程序测试之后，source和sink可以简单地替代为对外部系统的读取/写出的source和sink。Collection数据源使用方法如下：
+
+// Create a DataStream from a list of elements
+DataStream<Integer> myInts = env.fromElements(1, 2, 3, 4, 5);
+
+// Create a DataStream from any Java collection
+List<Tuple2<String, Integer>> data = ...
+DataStream<Tuple2<String, Integer>> myTuples = env.fromCollection(data);
+
+// Create a DataStream from an Iterator
+Iterator<Long> longIt = ...
+DataStream<Long> myLongs = env.fromCollection(longIt, Long.class);
+
+ 
+
+注意：当前Collection数据源需要实现Serializable接口的数据类型和迭代器。此外，Collection数据源无法并行执行（并行度=1）
+
+ 
+
+7.3 迭代器Data Sink
+Flink同样提供了一个收集测试和debug的DataStream结果的sink，它的使用方式如下：
+
+import org.apache.flink.contrib.streaming.DataStreamUtils
+
+DataStream<Tuple2<String, Integer>> myResult = ...
+Iterator<Tuple2<String, Integer>> myOutput = DataStreamUtils.collect(myResult)

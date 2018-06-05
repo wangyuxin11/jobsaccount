@@ -1,0 +1,38 @@
+
+kafka模拟客户端发送、接受消息
+producer   消息的生成者，即发布消息
+consumer   消息的消费者，即订阅消息
+broker     Kafka以集群的方式运行，可以由一个或多个服务组成，服务即broker
+zookeeper  协调转发 
+ 
+一、创建topic
+./kafka-topics.sh  --create --zookeeper 10.213.128.98:2181,10.213.129.58:2181,10.213.129.59:2181 --replication-factor 1 --partitions 1 --topic first_topic
+
+
+
+二、查看目前有哪些topic, 3条命令效果一样
+./kafka-topics.sh --list --zookeeper 10.213.128.98:2181
+./kafka-topics.sh --list --zookeeper 10.213.129.58:2181
+./kafka-topics.sh --list --zookeeper 10.213.129.59:2181
+
+
+
+二、创建完后可以使用list查看下
+./kafka-topics.sh --list --zookeeper localhost:2181 first_topic
+./kafka-topics.sh --list --zookeeper 10.213.128.98:2181 new
+./kafka-topics.sh --list --zookeeper localhost:2181 new
+
+
+
+
+##创建TOPIC   kafka-create-topic.sh
+##重新分配分区       kafka-reassign-partitions.sh
+##为Topic增加 partition数目        kafka-add-partitions.sh        ./bin/kafka-add-partitions.sh --topic test --partition 2  --zookeeper  192.168.197.170:2181,192.168.197.171:2181 （为topic test增加2个分区）
+##控制台接收消息         
+bin/kafka-console-consumer.sh --zookeeper  192.168.197.170:2181,192.168.197.171:2181  --from-beginning --topic test
+
+##控制台发送消息
+bin/kafka-console-producer.sh --broker-list  192.168.197.170:9092,192.168.197.171: 9092    --topic test 
+
+##手动均衡topic, kafka-preferred-replica-election.sh
+

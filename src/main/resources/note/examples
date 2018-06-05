@@ -1,0 +1,1 @@
+bin/flink run examples/streaming/SocketWindowWordCount.jar --port 9000

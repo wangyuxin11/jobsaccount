@@ -1,0 +1,69 @@
+    /**
+     * 查看目前有哪些topic, 3条命令效果一样
+     * 
+     * ./kafka-topics.sh --list --zookeeper 10.213.128.98:2181
+     * ./kafka-topics.sh --list --zookeeper 10.213.129.58:2181
+     * ./kafka-topics.sh --list --zookeeper 10.213.129.59:2181
+     * 
+     */
+     
+     
+     
+
+1. Example
+(1) 运行示例程序，不传参数：
+./bin/flink run ./examples/batch/WordCount.jar
+
+(2) 运行示例程序，带输入和输出文件参数：
+./bin/flink run ./examples/batch/WordCount.jar --input file:///home/xiaosi/a.txt --output file:///home/xiaosi/result.txt
+
+(3) 运行示例程序，带输入和输出文件参数,并设置16个并发度：
+./bin/flink run -p 16 ./examples/batch/WordCount.jar --input file:///home/xiaosi/a.txt --output file:///home/xiaosi/result.txt
+
+(4) 运行示例程序，并禁止Flink输出日志
+./bin/flink run -q ./examples/batch/WordCount.jar
+
+(5) 以独立(detached)模式运行示例程序
+./bin/flink run -d ./examples/batch/WordCount.jar
+
+(6) 在指定JobManager上运行示例程序
+./bin/flink run -m myJMHost:6123 ./examples/batch/WordCount.jar --input file:///home/xiaosi/a.txt --output file:///home/xiaosi/result.txt
+
+(7) 运行示例程序，指定程序入口类(Main方法所在类)：
+./bin/flink run -c org.apache.flink.examples.java.wordcount.WordCount ./examples/batch/WordCount.jar --input file:///home/xiaosi/a.txt --output file:///home/xiaosi/result.txt
+
+(8) 运行示例程序，使用per-job YARN 集群启动 2个TaskManager
+./bin/flink run -m yarn-cluster -yn 2 ./examples/batch/WordCount.jar --input hdfs:///xiaosi/a.txt --output hdfs:///xiaosi/result.txt
+
+(9) 以JSON格式输出 WordCount示例程序优化执行计划：
+./bin/flink info ./examples/batch/WordCount.jar --input file:///home/xiaosi/a.txt --output file:///home/xiaosi/result.txt
+
+(10) 列出已经调度的和正在运行的Job(包含Job ID信息)
+./bin/flink list
+
+(11) 列出已经调度的Job(包含Job ID信息)
+./bin/flink list -s
+
+(13) 列出正在运行的Job(包含Job ID信息)
+./bin/flink list -r
+
+(14) 列出在Flink YARN中运行Job
+./bin/flink list -m yarn-cluster -yid <yarnApplicationID> -r
+
+(15) 取消一个Job
+./bin/flink cancel <jobID>
+
+(16) 取消一个带有保存点(savepoint)的Job
+./bin/flink cancel -s [targetDirectory] <jobID>
+
+(17) 停止一个Job(只适用于流计算Job)
+./bin/flink stop <jobID>
+
+备注:
+取消和停止Job区别如下：
+调用取消Job时，作业中的operator立即收到一个调用cancel()方法的指令以尽快取消它们。如果operator在调用取消操作后没有停止，Flink将定期开启中断线程来取消作业直到作业停止。
+调用停止Job是一种停止正在运行的流作业的更加优雅的方法。停止仅适用于使用实现`StoppableFunction`接口的源的那些作业。当用户请求停止作业时，所有源将收到调用stop()方法指令。但是Job还是会持续运行，直到所有来源已经正确关闭。这允许作业完成处理所有正在传输的数据(inflight data)。
+
+
+原文:https://ci.apache.org/projects/flink/flink-docs-release-1.3/setup/cli.html
+

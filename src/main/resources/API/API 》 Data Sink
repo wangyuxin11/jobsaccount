@@ -1,0 +1,22 @@
+四、Data Sink
+Data Sink消耗DataStream并将它们转发到文件、socket、外部系统或打印它们。Flink自带了许多内置的输出格式，封装为DataStream的operation中：
+
+·        writeAsText() / TextOutputFormat - 以行字符串的方式写文件，字符串通过调用每个element的toString()方法获得。
+
+·        writeAsCsv(…) / CsvOutputFormat - 以逗号分隔的值来讲Tuple写入文件，行和域的分隔符是可以配置的。每个域的值是通过调用object的toString()方法获得的。
+
+·        print() / printToErr() - 将每个element的toString()值打印在标准输出 / 标准错误流中。可以提供一个前缀（msg）作为输出的前缀，使得在不同print的调用可以互相区分。如果并行度大于1，输出也会以task的标识符（identifier）为产生的输出的前缀。
+
+·        writeUsingOutputFormat() / FileOutputFormat - 自定义文件输出所用的方法和基类，支持自定义object到byte的转换。
+
+·        writeToSocket - 依据SerializationSchema将element写到socket中。
+
+·        addSink - 调用自定义sink方法，Flink自带连接到其他系统的connector（如Apache Kafka），这些connector都以sink方法的形式实现。
+
+ 
+
+注意DataStream的write*()函数主要用于debug，它们不参与Flink的检查点，这意味着这些方法通常处于“至少一次（at-least-once）“的执行语义下。flush到目标系统的数据依赖于OutputFormat的实现，这意味着不是所有发送到OutputFormat的element都会立即出现在目标系统中，此外，在失效的情况下，这些数据很可能会丢失。
+
+ 
+
+故为了可靠性以及将stream“恰好一次（exact once）”地传入文件系统，我们应当使用flink-connector-filesystem。此外，通过实现“.addSink(…)”的自定义内容会参加Flink的检查点机制，故会保证“恰好一次”的执行语义。
