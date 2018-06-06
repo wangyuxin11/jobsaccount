@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "com.wanda.idc.exchange.messages";
+
+message PBTimeStatus {
+    string curtime = 1;  //hhmmss
+    string extra = 2;
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option java_package = "com.wanda.idc.exchange.messages";
+option java_outer_classname = "PBStatusMessage";
+
+message PBStatus {
+    LevelType level = 1;
+    string name = 2;
+    StatusType status = 3;
+    SwitchMode switchmode = 4;
+    string extra = 5;
+
+    enum LevelType {
+        //交易所
+        EXCHANGE = 0;
+        //市场
+        MARKET = 1;
+        //合约
+        CONTRACT = 2;
+        //手动切换
+        MARKETSWITCHMODE = 3;
+        //手动切换
+        CONTRACTSWITCHMODE = 4;
+    }
+
+    enum StatusType {
+        //交易
+        OPEN = 0;
+        //停止
+        STOP = 1;
+        //闭市
+        CLOSE = 2;
+    }
+
+    enum SwitchMode {
+        //手动
+        MANNUAL = 0;
+        //自动
+        AUTO = 1;
+    }
+}

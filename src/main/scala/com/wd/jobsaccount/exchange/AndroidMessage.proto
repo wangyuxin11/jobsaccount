@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.wanda.idc.exchange.messages";
+option java_outer_classname = "AndroidMessage";
+
+message AndroidPush {
+    string appid = 1;
+    string appkey = 2;
+    string authorization = 3;
+    string token = 4;
+    string title = 5;
+    string msg = 6;
+    string sendno = 7;
+    string extra = 8;
+}

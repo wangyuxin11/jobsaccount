@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+option java_package = "com.wanda.idc.exchange.messages";
+option java_outer_classname = "PBMessage";
+
+message PBOrder {
+  // Order唯一标识符
+  string orderId = 1;
+  // 交易积分代码(2.0版本会废弃这个字段)
+  string exCode = 2;
+  // 订单类型
+  PBOrderType orderType = 3;
+  // 订单持方
+  PBOrderSide orderSide = 4;
+  // 提交订单用户名
+  string broker = 5;
+  // 订单买卖数量
+  string quantity = 6;
+  // 订单提交时间
+  int64 orderTime = 7;
+  // 订单价格
+  string price = 8;
+  // 行动类型
+  OrderAction action = 11;
+  //合约代码
+  string contractCode = 12;
+  //合约类型contractType	 1:积分+代币，2：卡券+代币 3：积分+积分
+  string contractType = 13;
+  //主合约代码
+  string masterEx = 14;
+  //次合约代码
+  string slaveEx = 15;
+  //IP
+  string IP = 16;
+  //设备信息
+  string deviceInfo = 17;
+
+  enum PBOrderType {
+    // 限价订单
+    LIMIT = 0;
+    // 市价订单
+    MARKET = 1;
+  }
+
+  enum PBOrderSide {
+    BUY = 0;
+    SELL = 1;
+  }
+
+  enum OrderAction {
+    SUBMIT = 0;
+    CANCEL = 1;
+    TIMEOUT_CHECK = 2;
+    SUBMIT_FAILURE = 3;
+    CLEAN = 4;
+  }
+}
+
+message PBTrade {
+  // 交易唯一标识符
+  int64 tradeId = 1;
+  // 交易积分代码(2.0版本会废弃这个字段)
+  string exCode = 2;
+  // 卖单标识符
+  string sellOrderId = 3;
+  // 卖单用户
+  string seller = 4;
+  // 买单标识符
+  string buyOrderId = 5;
+  // 买单用户
+  string buyer = 6;
+  // 成交数量
+  string quantity = 7;
+  // 成交价格
+  string price = 8;
+  // 成交时间
+  int64 tradeTime = 9;
+  // 交易状态
+  PBTradeStatus tradeStatus = 10;
+  //合约代码
+  string contractCode = 11;
+  //合约类型contractType	 1:积分+代币，2：卡券+代币 3：积分+积分，
+  string contractType = 12;
+  //主合约代码
+  string masterEx = 13;
+  //次合约代码
+  string slaveEx = 14;
+  //IP
+  string IP = 15;
+  //设备信息
+  string deviceInfo = 16;
+
+  enum PBTradeStatus {
+    // 结算成功
+    SUCCESS = 0;
+    // 积分结算失败
+    POINT_SETTLE_FAILED = 1;
+    // 代币结算失败
+   // COIN_SETTLE_FAILED = 2;
+    //合约类型1结算失败
+    CONTRACTTYPE_1_FAILED = 3;
+    //合约类型2结算失败
+    CONTRACTTYPE_2_FAILED = 4;
+    //合约类型3结算失败
+    CONTRACTTYPE_3_FAILED = 5;
+    // 未知状态
+    UNKNOWN = 6;
+    // 错误
+    ERROR = 7;
+  }
+}
+
+
+message CancelOrderMessage {
+  string orderId = 1;
+  string contratCode = 2;
+  string broker = 3;
+  string expectCanceSize = 4;
+  CancelReason reason = 5;
+  int64 cancelTime = 6;
+  CancelResult result = 7;
+  OrderSide side = 8;
+  //合约类型contractType	 1:积分+代币，2：卡券+代币 3：积分+积分，
+  string contractType = 9;
+
+  enum CancelReason {
+    // 24小时订单有效期到期
+    SYSTEM_TIMEOUT = 0;
+    // 用户手动撤单
+    USER_ACTION = 1;
+  }
+
+  enum CancelResult {
+    SUCCESS = 0;
+    FAILURE = 1;
+  }
+
+  enum OrderSide {
+    BUY = 0;
+    SELL = 1;
+  }
+}

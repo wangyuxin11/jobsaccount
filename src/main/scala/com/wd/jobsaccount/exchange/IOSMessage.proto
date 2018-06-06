@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.wanda.idc.exchange.messages";
+option java_outer_classname = "IOSMessage";
+
+message MsgPush {
+    string appkey = 1;             //应用标识
+    string release = 2;            //A:Appstore版本;E:企业版本
+    string authorization = 3;      //md5(appsecret+msg+sendno)
+    string token = 4;              //推送单个用户时为设备标识，推送全量用户时为all
+    string msg = 5;                //消息内容
+    string sendno = 6;             //消息在该应用内的唯一标识
+    string extra = 7;              //other msg 用json来组合 其他相关到数据(creatime, msgtype,orderid,linkurl)
+}
+

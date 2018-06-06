@@ -1,0 +1,1 @@
+利用maven命令：mvn clean package 将正常的项目打包，然后cd项目找到打好的包利用命令 jar -xvf *.jar 解压包找到lib文件夹复制到项目下，备用。
